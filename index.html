@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A personal study of the Parables and Miracles of Jesus Christ by Palukurty Deva Vara Prasad, Visakhapatnam. Meditations drawn from the four Gospels.">
+  <meta name="keywords" content="Bible, Jesus Christ, Parables, Miracles, Healings, Gospel, Christian, Bible Study, P.D.V. Prasad">
+  <meta name="author" content="Palukurty Deva Vara Prasad">
+  <meta property="og:title" content="Bible Studies by P.D.V. Prasad">
+  <meta property="og:description" content="Meditations on the Parables and Miracles of Jesus Christ">
+  <meta property="og:type" content="website">
+  <title>Bible Studies by P.D.V. Prasad</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav" id="main-nav">
+    <div class="nav__inner">
+      <div class="nav__logo" onclick="App.navigate('home')" id="nav-logo">
+        <div class="nav__logo-icon">✦</div>
+        Bible Studies · P.D.V. Prasad
+      </div>
+      <div class="nav__links">
+        <div class="nav__link" data-view="home" onclick="App.navigate('home')" id="nav-home">Home</div>
+        <div class="nav__link" data-view="parables" onclick="App.navigate('parables')" id="nav-parables">Parables</div>
+        <div class="nav__link" data-view="miracles" onclick="App.navigate('miracles')" id="nav-miracles">Miracles</div>
+        <div class="nav__link" id="lang-toggle" onclick="App.toggleLang()" title="Switch to Telugu">🌐 తెలుగు</div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- App Root — all views render here -->
+  <main id="app-root" role="main">
+    <!-- Loading state -->
+    <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:80px;">
+      <div style="text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:16px;animation:twinkle 1.5s infinite;">✦</div>
+        <p style="color:var(--text-muted);font-size:0.9rem;">Loading the Word…</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts (order matters) -->
+  <script src="./js/data.js"></script>
+  <script src="./js/render.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
