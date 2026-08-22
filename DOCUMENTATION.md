@@ -2,6 +2,12 @@
 
 > A complete reference for understanding, maintaining, and extending this website.
 
+| | |
+|---|---|
+| 🌐 **Live URL** | https://bible-studies.pages.dev |
+| 📦 **Source code** | https://github.com/sarat911/bible-studies |
+| ☁️ **Hosting** | Cloudflare Pages (free) |
+
 ---
 
 ## Table of Contents
