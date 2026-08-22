@@ -1,6 +1,7 @@
 # Bible Studies by P.D.V. Prasad
 
-🌐 **Live site:** https://bible-studies.pages.dev
+🌐 **Live site:** https://prasadbiblestudy.com  
+☁️ **Also available at:** https://bible-studies.pages.dev
 
 A personal study of the Parables and Miracles of Jesus Christ by **Palukurty Deva Vara Prasad**, Visakhapatnam, India.
 

@@ -4,9 +4,11 @@
 
 | | |
 |---|---|
-| 🌐 **Live URL** | https://bible-studies.pages.dev |
+| 🌐 **Live URL** | https://prasadbiblestudy.com |
+| ☁️ **Backup URL** | https://bible-studies.pages.dev |
 | 📦 **Source code** | https://github.com/sarat911/bible-studies |
-| ☁️ **Hosting** | Cloudflare Pages (free) |
+| 🏠 **Hosting** | Cloudflare Pages (free) |
+| 🔒 **SSL** | Automatic via Cloudflare |
 
 ---
 
