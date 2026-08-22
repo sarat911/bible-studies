@@ -12,19 +12,10 @@ const App = (() => {
 
   // ── Init ──────────────────────────────────────────────────
   async function init() {
-    try {
-      [parables, miracles] = await Promise.all([
-        DataStore.getParables(),
-        DataStore.getMiracles()
-      ]);
-    } catch (e) {
-      root().innerHTML = `<div style="padding:120px 24px;text-align:center;color:var(--text-muted)">
-        <h2 style="color:var(--gold-muted)">Loading Error</h2>
-        <p>Could not load content files. Please open via a local server.</p>
-        <p style="font-size:0.8rem;margin-top:8px">Try: <code>python3 -m http.server 8080</code> in the website folder</p>
-      </div>`;
-      return;
-    }
+    [parables, miracles] = await Promise.all([
+      DataStore.getParables(),
+      DataStore.getMiracles()
+    ]);
 
     // Parse URL hash for deep linking
     const hash = window.location.hash.replace('#', '');
