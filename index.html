@@ -10,6 +10,15 @@
   <meta property="og:description" content="Meditations on the Parables and Miracles of Jesus Christ">
   <meta property="og:type" content="website">
   <title>Bible Studies by P.D.V. Prasad</title>
+  <script>
+    // Apply saved theme immediately before render to avoid flash
+    (function() {
+      const saved = localStorage.getItem('bibleStudiesTheme');
+      if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="./css/style.css">
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
 </head>
@@ -27,6 +36,10 @@
         <div class="nav__link" data-view="parables" onclick="App.navigate('parables')" id="nav-parables">Parables</div>
         <div class="nav__link" data-view="miracles" onclick="App.navigate('miracles')" id="nav-miracles">Miracles</div>
         <div class="nav__link" id="lang-toggle" onclick="App.toggleLang()" title="Switch to Telugu">🌐 తెలుగు</div>
+        <div class="theme-btn-wrap" onclick="App.toggleTheme()" id="theme-toggle" title="Toggle dark / light mode">
+          <span class="theme-icon" id="theme-icon">🌙</span>
+          <div class="theme-btn" id="theme-btn"></div>
+        </div>
       </div>
     </div>
   </nav>

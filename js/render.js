@@ -47,6 +47,9 @@ const Renderer = (() => {
     return `
       <section class="hero fade-in" id="home">
         <div class="hero__bg"></div>
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+        <div class="hero__orb hero__orb--3"></div>
         <div class="hero__stars">${stars()}</div>
         <div class="hero__content">
           <div class="hero__badge">✦ A Personal Study of the Word ✦</div>

@@ -81,12 +81,31 @@ const App = (() => {
 
     root().innerHTML = html;
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Re-sync theme icon after every render (it's in the nav, which is static)
+    syncThemeIcon();
   }
 
   function setActiveNav(view) {
     document.querySelectorAll('.nav__link').forEach(el => {
       el.classList.toggle('active', el.dataset.view === view);
     });
+  }
+
+  // ── Theme Toggle ──────────────────────────────────────────
+  function toggleTheme() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const newTheme = isDark ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+    localStorage.setItem('bibleStudiesTheme', newTheme);
+    const icon = document.getElementById('theme-icon');
+    if (icon) icon.textContent = isDark ? '🌙' : '☀️';
+  }
+
+  function syncThemeIcon() {
+    const icon = document.getElementById('theme-icon');
+    if (!icon) return;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    icon.textContent = isDark ? '☀️' : '🌙';
   }
 
   // ── Language Toggle ───────────────────────────────────────
@@ -113,7 +132,7 @@ const App = (() => {
             తెలుగు పుస్తకాలు త్వరలో అందుబాటులోకి వస్తాయి.<br>
             Telugu books will be added soon. The site is fully prepared to support Telugu content.
           </p>
-          <button onclick="App.toggleLang()" style="padding:12px 24px;background:var(--gold-glow);border:1px solid var(--border-active);border-radius:8px;color:var(--gold-warm);font-size:0.9rem;cursor:pointer;font-family:'Inter',sans-serif;">
+          <button onclick="App.toggleLang()" style="padding:12px 24px;background:var(--accent-soft);border:1.5px solid var(--border-active);border-radius:8px;color:var(--accent);font-size:0.9rem;cursor:pointer;font-family:'Inter',sans-serif;">
             ← Back to English
           </button>
         </div>
@@ -121,7 +140,7 @@ const App = (() => {
     `;
   }
 
-  return { init, navigate, toggleLang };
+  return { init, navigate, toggleLang, toggleTheme };
 })();
 
 // ── Start ─────────────────────────────────────────────────
