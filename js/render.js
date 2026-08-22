@@ -263,16 +263,18 @@ const Renderer = (() => {
     const videoHtml = ytId ? `
       <div class="content-section">
         <div class="content-section__label">Video Teaching</div>
-        <div class="video-container" id="yt-container-${ytId}">
-          <div class="video-thumb" onclick="loadYouTube('${ytId}')" style="cursor:pointer;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000;border:1px solid var(--border);">
-            <img src="${ytThumb}" alt="Video thumbnail" style="width:100%;height:100%;object-fit:cover;opacity:0.85;" onerror="this.style.display='none'">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">
-              <div style="width:68px;height:68px;border-radius:50%;background:rgba(255,50,50,0.9);display:flex;align-items:center;justify-content:center;font-size:26px;color:#fff;box-shadow:0 4px 20px rgba(0,0,0,0.5);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">▶</div>
+        <a href="${esc(item.youtube)}" target="_blank" rel="noopener" class="video-thumb-link" style="display:block;text-decoration:none;">
+          <div style="position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#111;border:1px solid var(--border);transition:border-color 0.3s;" onmouseover="this.style.borderColor='rgba(245,200,66,0.4)'" onmouseout="this.style.borderColor='var(--border)'">
+            <img src="${ytThumb}" alt="Video thumbnail" style="width:100%;height:100%;object-fit:cover;opacity:0.85;display:block;" onerror="this.style.display='none'">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;">
+              <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,30,30,0.92);display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.6);transition:transform 0.2s,box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.1)';this.style.boxShadow='0 6px 32px rgba(0,0,0,0.8)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 24px rgba(0,0,0,0.6)'">▶</div>
             </div>
-            <div style="position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.7);color:#fff;font-size:0.75rem;padding:4px 10px;border-radius:4px;">Click to play</div>
+            <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 16px 12px;background:linear-gradient(transparent,rgba(0,0,0,0.8));display:flex;align-items:center;justify-content:space-between;">
+              <span style="color:#fff;font-size:0.78rem;opacity:0.9;">Opens on YouTube</span>
+              <span style="background:rgba(255,30,30,0.9);color:#fff;font-size:0.7rem;font-weight:600;padding:3px 8px;border-radius:3px;letter-spacing:0.03em;">▶ YOUTUBE</span>
+            </div>
           </div>
-          <div id="yt-player-${ytId}" style="display:none;border-radius:12px;overflow:hidden;aspect-ratio:16/9;background:#000;border:1px solid var(--border);"></div>
-        </div>
+        </a>
         <a href="${esc(item.youtube)}" class="youtube-btn" target="_blank" rel="noopener" style="margin-top:12px;display:inline-flex;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 15l5.19-3L10 9v6m11.56-7.83c.13.47.22 1.1.28 1.9.07.8.1 1.49.1 2.09L22 12c0 2.19-.16 3.8-.44 4.83-.25.9-.83 1.48-1.73 1.73-.47.13-1.33.22-2.65.28-1.3.07-2.49.1-3.59.1L12 19c-4.19 0-6.8-.16-7.83-.44-.9-.25-1.48-.83-1.73-1.73-.13-.47-.22-1.1-.28-1.9-.07-.8-.1-1.49-.1-2.09L2 12c0-2.19.16-3.8.44-4.83.25-.9.83-1.48 1.73-1.73.47-.13 1.33-.22 2.65-.28 1.3-.07 2.49-.1 3.59-.1L12 5c4.19 0 6.8.16 7.83.44.9.25 1.48.83 1.73 1.73z"/></svg>
           Watch on YouTube
@@ -344,13 +346,3 @@ const Renderer = (() => {
 
   return { renderHome, renderBookIndex, renderChapter };
 })();
-
-// ── YouTube Lazy Load ─────────────────────────────────────
-function loadYouTube(id) {
-  const thumb = document.querySelector(`#yt-container-${id} .video-thumb`);
-  const player = document.getElementById(`yt-player-${id}`);
-  if (!thumb || !player) return;
-  thumb.style.display = 'none';
-  player.style.display = 'block';
-  player.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:block;width:100%;height:100%;"></iframe>`;
-}
