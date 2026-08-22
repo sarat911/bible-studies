@@ -94,17 +94,23 @@ const App = (() => {
   // ── Theme Toggle ──────────────────────────────────────────
   function toggleTheme() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const newTheme = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-    localStorage.setItem('bibleStudiesTheme', newTheme);
-    const icon = document.getElementById('theme-icon');
-    if (icon) icon.textContent = isDark ? '🌙' : '☀️';
+    if (isDark) {
+      // Switch to light
+      document.documentElement.setAttribute('data-theme', '');
+      localStorage.setItem('bibleStudiesTheme', 'light');
+    } else {
+      // Switch to dark
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('bibleStudiesTheme', 'dark');
+    }
+    syncThemeIcon();
   }
 
   function syncThemeIcon() {
     const icon = document.getElementById('theme-icon');
     if (!icon) return;
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    // In dark mode show ☀️ (click to go light), in light mode show 🌙 (click to go dark)
     icon.textContent = isDark ? '☀️' : '🌙';
   }
 
