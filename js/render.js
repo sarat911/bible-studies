@@ -221,33 +221,9 @@ const Renderer = (() => {
     const prev = items[itemIndex - 1];
     const next = items[itemIndex + 1];
 
-    // Use explicit scripture array if present (set in JSON for specific parables),
-    // otherwise fall back to auto-detecting via quote marks in body paragraphs.
-    let scriptureParas = [];
-    let explanationParas = [];
-
-    if (item.scripture && item.scripture.length > 0) {
-      // Explicit split defined in JSON
-      scriptureParas   = item.scripture;
-      explanationParas = item.body || [];
-    } else {
-      // Auto-detect: paragraphs with quotes near the start = scripture
-      const bodyParas = item.body || [];
-      let inScripture = true;
-      bodyParas.forEach((para, i) => {
-        const hasQuote = para.includes('"') || para.includes('\u201C') || para.includes('\u201D');
-        if (inScripture && i < 8 && hasQuote) {
-          scriptureParas.push(para);
-        } else {
-          inScripture = false;
-          explanationParas.push(para);
-        }
-      });
-      // If no scripture detected, treat all as explanation
-      if (scriptureParas.length === 0) {
-        explanationParas = bodyParas;
-      }
-    }
+    // Direct and deterministic: use explicit scripture and meditation arrays from JSON
+    const scriptureParas = item.scripture || [];
+    const explanationParas = item.meditation || item.body || [];
 
     const ytId = youtubeId(item.youtube);
     const ytThumb = ytId ? youtubeThumbnail(item.youtube) : null;
