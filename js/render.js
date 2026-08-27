@@ -157,7 +157,9 @@ const Renderer = (() => {
       </div>
     `).join('');
 
-    const preambleSnippet = (book.preamble || []).slice(0, 3).join(' ').substring(0, 280) + '...';
+    const preambleParas = (book.preamble || []);
+    const preambleShort = preambleParas.slice(0, 2).join(' ').substring(0, 300);
+    const preambleFullHtml = preambleParas.map(p => `<p style="margin-bottom:0.8rem;font-size:0.93rem;color:var(--text-secondary);line-height:1.75;">${esc(p)}</p>`).join('');
 
     return `
       <div class="page fade-in" id="page-${type}">
@@ -165,7 +167,17 @@ const Renderer = (() => {
           <div class="page-hero__inner">
             <div class="page-hero__back" onclick="App.navigate('home')">← Back to Home</div>
             <h1 class="page-hero__title">${esc(book.book)}</h1>
-            <p class="page-hero__desc">${esc(preambleSnippet)}</p>
+
+            <!-- Preamble: collapsible -->
+            <div class="preamble-box" id="preamble-box-${type}">
+              <div class="preamble-box__text" id="preamble-text-${type}">
+                ${preambleFullHtml}
+              </div>
+              <button class="preamble-box__toggle" id="preamble-btn-${type}"
+                onclick="togglePreamble('${type}')">
+                Show less ▲
+              </button>
+            </div>
             <div class="page-hero__stats">
               <div class="stat-pill">
                 <span class="stat-pill__num">${items.length}</span>
@@ -209,28 +221,32 @@ const Renderer = (() => {
     const prev = items[itemIndex - 1];
     const next = items[itemIndex + 1];
 
-    // Split body: first paragraph(s) that look like scripture vs explanation
-    // Scripture is usually the first few paragraphs with quotes
-    const bodyParas = item.body || [];
-
-    // Identify scripture paragraphs (contain quotation marks and are near the start)
+    // Use explicit scripture array if present (set in JSON for specific parables),
+    // otherwise fall back to auto-detecting via quote marks in body paragraphs.
     let scriptureParas = [];
     let explanationParas = [];
-    let inScripture = true;
-    bodyParas.forEach((para, i) => {
-      const hasQuote = para.includes('"') || para.includes('\u201C') || para.includes('\u201D');
-      const isLong = para.length > 100;
-      if (inScripture && i < 8 && hasQuote) {
-        scriptureParas.push(para);
-      } else {
-        inScripture = false;
-        explanationParas.push(para);
-      }
-    });
 
-    // If no scripture detected, treat all as explanation
-    if (scriptureParas.length === 0) {
-      explanationParas = bodyParas;
+    if (item.scripture && item.scripture.length > 0) {
+      // Explicit split defined in JSON
+      scriptureParas   = item.scripture;
+      explanationParas = item.body || [];
+    } else {
+      // Auto-detect: paragraphs with quotes near the start = scripture
+      const bodyParas = item.body || [];
+      let inScripture = true;
+      bodyParas.forEach((para, i) => {
+        const hasQuote = para.includes('"') || para.includes('\u201C') || para.includes('\u201D');
+        if (inScripture && i < 8 && hasQuote) {
+          scriptureParas.push(para);
+        } else {
+          inScripture = false;
+          explanationParas.push(para);
+        }
+      });
+      // If no scripture detected, treat all as explanation
+      if (scriptureParas.length === 0) {
+        explanationParas = bodyParas;
+      }
     }
 
     const ytId = youtubeId(item.youtube);

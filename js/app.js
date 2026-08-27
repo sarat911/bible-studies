@@ -149,5 +149,14 @@ const App = (() => {
   return { init, navigate, toggleLang, toggleTheme };
 })();
 
+// ── Preamble toggle ───────────────────────────────────────
+function togglePreamble(type) {
+  const text = document.getElementById('preamble-text-' + type);
+  const btn  = document.getElementById('preamble-btn-' + type);
+  if (!text || !btn) return;
+  const expanded = text.classList.toggle('expanded');
+  btn.textContent = expanded ? 'Show less ▲' : 'Show more ▼';
+}
+
 // ── Start ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', App.init);

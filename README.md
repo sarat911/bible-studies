@@ -66,3 +66,8 @@ website/
 
 ## 🌏 Telugu Support
 The site has a language toggle button (🌐 తెలుగు) in the navigation. When Telugu documents are ready, add a `data/parables_te.json` and `data/miracles_te.json` and update `js/data.js` accordingly.
+
+
+@68b561cf-765d-4a18-b7df-8d02890da62b
+
+[your request here — e.g. "add Telugu content", "add new parable", etc.]

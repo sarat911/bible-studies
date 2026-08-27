@@ -654,3 +654,36 @@ a:hover { color: var(--accent-light); }
   .container, .container--narrow { padding: 0 16px; }
   .chapter-content { padding: 28px 16px 60px; }
 }
+
+/* ── Preamble Box ─────────────────────────────────────────── */
+.preamble-box {
+  margin: 0 0 24px 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all 0.35s;
+}
+
+.preamble-box__text {
+  padding: 20px 24px 0;
+  max-height: 160px;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.preamble-box__text.expanded {
+  max-height: 2000px;
+}
+
+.preamble-box__toggle {
+  display: block; width: 100%;
+  padding: 10px 24px;
+  background: transparent;
+  border: none; border-top: 1px solid var(--border);
+  color: var(--accent); font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; text-align: left;
+  font-family: 'Inter', sans-serif;
+  transition: background var(--transition);
+}
+.preamble-box__toggle:hover { background: var(--accent-glow); }
