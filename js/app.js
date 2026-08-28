@@ -1,21 +1,20 @@
 
 // ── App Router ─────────────────────────────────────────────
-// SPA navigation controller
+// SPA navigation controller with Bilingual Support (English / Telugu)
 
 const App = (() => {
   let parables = null;
   let miracles = null;
-  let currentLang = 'en';
+  let currentLang = localStorage.getItem('bibleStudiesLang') || 'en';
   let currentView = 'home';
+  let currentNumber = null;
 
   const root = () => document.getElementById('app-root');
 
   // ── Init ──────────────────────────────────────────────────
   async function init() {
-    [parables, miracles] = await Promise.all([
-      DataStore.getParables(),
-      DataStore.getMiracles()
-    ]);
+    await loadData();
+    syncNavLabels();
 
     // Parse URL hash for deep linking
     const hash = window.location.hash.replace('#', '');
@@ -38,6 +37,13 @@ const App = (() => {
     });
   }
 
+  async function loadData() {
+    [parables, miracles] = await Promise.all([
+      DataStore.getParables(currentLang),
+      DataStore.getMiracles(currentLang)
+    ]);
+  }
+
   // ── Navigate ──────────────────────────────────────────────
   function navigate(view, number) {
     navigateInternal(view, number, true);
@@ -45,6 +51,7 @@ const App = (() => {
 
   function navigateInternal(view, number, updateHash) {
     currentView = view;
+    currentNumber = number;
 
     if (updateHash) {
       const hash = number != null ? `${view}/${number}` : view;
@@ -54,34 +61,33 @@ const App = (() => {
     let html = '';
 
     if (view === 'home') {
-      html = Renderer.renderHome(parables, miracles);
+      html = Renderer.renderHome(parables, miracles, currentLang);
       setActiveNav('home');
     } else if (view === 'parables') {
       if (number != null) {
-        html = Renderer.renderChapter(parables, 'parables', number);
+        html = Renderer.renderChapter(parables, 'parables', number, currentLang);
       } else {
-        html = Renderer.renderBookIndex(parables, 'parables');
+        html = Renderer.renderBookIndex(parables, 'parables', currentLang);
       }
       setActiveNav('parables');
     } else if (view === 'miracles') {
       if (number != null) {
-        html = Renderer.renderChapter(miracles, 'miracles', number);
+        html = Renderer.renderChapter(miracles, 'miracles', number, currentLang);
       } else {
-        html = Renderer.renderBookIndex(miracles, 'miracles');
+        html = Renderer.renderBookIndex(miracles, 'miracles', currentLang);
       }
       setActiveNav('miracles');
     } else if (view === 'lesson') {
       if (number != null) {
-        html = Renderer.renderChapter(miracles, 'lesson', number);
+        html = Renderer.renderChapter(miracles, 'lesson', number, currentLang);
       } else {
-        html = Renderer.renderBookIndex(miracles, 'miracles');
+        html = Renderer.renderBookIndex(miracles, 'miracles', currentLang);
       }
       setActiveNav('miracles');
     }
 
     root().innerHTML = html;
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Re-sync theme icon after every render (it's in the nav, which is static)
     syncThemeIcon();
   }
 
@@ -91,15 +97,44 @@ const App = (() => {
     });
   }
 
+  function syncNavLabels() {
+    const isTe = currentLang === 'te';
+    const logo = document.getElementById('nav-logo');
+    if (logo) {
+      logo.innerHTML = `<div class="nav__logo-icon">✦</div> ${isTe ? 'బైబిలు ధ్యానములు · పి.డి.వి. ప్రసాద్' : 'Bible Studies · P.D.V. Prasad'}`;
+    }
+    const homeBtn = document.getElementById('nav-home');
+    if (homeBtn) homeBtn.textContent = isTe ? 'హోమ్' : 'Home';
+
+    const parablesBtn = document.getElementById('nav-parables');
+    if (parablesBtn) parablesBtn.textContent = isTe ? 'ఉపమానములు' : 'Parables';
+
+    const miraclesBtn = document.getElementById('nav-miracles');
+    if (miraclesBtn) miraclesBtn.textContent = isTe ? 'అద్భుతములు' : 'Miracles';
+
+    const langBtn = document.getElementById('lang-toggle');
+    if (langBtn) {
+      langBtn.textContent = isTe ? '🌐 English' : '🌐 తెలుగు';
+      langBtn.title = isTe ? 'Switch to English' : 'తెలుగులోకి మార్చండి';
+    }
+  }
+
+  // ── Language Toggle ───────────────────────────────────────
+  async function toggleLang() {
+    currentLang = currentLang === 'en' ? 'te' : 'en';
+    localStorage.setItem('bibleStudiesLang', currentLang);
+    await loadData();
+    syncNavLabels();
+    navigateInternal(currentView, currentNumber, false);
+  }
+
   // ── Theme Toggle ──────────────────────────────────────────
   function toggleTheme() {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     if (isDark) {
-      // Switch to light
       document.documentElement.setAttribute('data-theme', '');
       localStorage.setItem('bibleStudiesTheme', 'light');
     } else {
-      // Switch to dark
       document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('bibleStudiesTheme', 'dark');
     }
@@ -110,52 +145,28 @@ const App = (() => {
     const icon = document.getElementById('theme-icon');
     if (!icon) return;
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-    // In dark mode show ☀️ (click to go light), in light mode show 🌙 (click to go dark)
     icon.textContent = isDark ? '☀️' : '🌙';
   }
 
-  // ── Language Toggle ───────────────────────────────────────
-  function toggleLang() {
-    currentLang = currentLang === 'en' ? 'te' : 'en';
-    const btn = document.getElementById('lang-toggle');
-    if (btn) {
-      btn.textContent = currentLang === 'en' ? '🌐 తెలుగు' : '🌐 English';
-    }
-    if (currentLang === 'te') {
-      showTeluguNotice();
-    } else {
-      navigateInternal(currentView, null, false);
-    }
+  function getLang() {
+    return currentLang;
   }
 
-  function showTeluguNotice() {
-    root().innerHTML = `
-      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;padding-top:100px">
-        <div style="max-width:500px;text-align:center">
-          <div style="font-size:3rem;margin-bottom:16px">🙏</div>
-          <h2 style="font-family:'Playfair Display',serif;color:var(--text-primary);margin-bottom:16px">Telugu Content Coming Soon</h2>
-          <p style="color:var(--text-muted);line-height:1.7;margin-bottom:24px">
-            తెలుగు పుస్తకాలు త్వరలో అందుబాటులోకి వస్తాయి.<br>
-            Telugu books will be added soon. The site is fully prepared to support Telugu content.
-          </p>
-          <button onclick="App.toggleLang()" style="padding:12px 24px;background:var(--accent-soft);border:1.5px solid var(--border-active);border-radius:8px;color:var(--accent);font-size:0.9rem;cursor:pointer;font-family:'Inter',sans-serif;">
-            ← Back to English
-          </button>
-        </div>
-      </div>
-    `;
-  }
-
-  return { init, navigate, toggleLang, toggleTheme };
+  return { init, navigate, toggleLang, toggleTheme, getLang };
 })();
 
 // ── Preamble toggle ───────────────────────────────────────
-function togglePreamble(type) {
+function togglePreamble(type, lang) {
   const text = document.getElementById('preamble-text-' + type);
   const btn  = document.getElementById('preamble-btn-' + type);
   if (!text || !btn) return;
   const expanded = text.classList.toggle('expanded');
-  btn.textContent = expanded ? 'Show less ▲' : 'Show more ▼';
+  const isTe = (lang || App.getLang()) === 'te';
+  if (isTe) {
+    btn.textContent = expanded ? 'తక్కువ చూపు ▲' : 'మరింత చూపు ▼';
+  } else {
+    btn.textContent = expanded ? 'Show less ▲' : 'Show more ▼';
+  }
 }
 
 // ── Start ─────────────────────────────────────────────────
