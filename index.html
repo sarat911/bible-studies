@@ -27,15 +27,19 @@
   <!-- Navigation -->
   <nav class="nav" id="main-nav">
     <div class="nav__inner">
-      <div class="nav__logo" onclick="App.navigate('home')" id="nav-logo">
-        <div class="nav__logo-icon">✦</div>
-        Bible Studies · P.D.V. Prasad
+      <div class="nav__brand">
+        <div class="nav__logo" onclick="App.navigate('home')" id="nav-logo">
+          <div class="nav__logo-icon">✦</div>
+          <span class="nav__logo-text"><span class="nav__logo-title">Bible Studies</span><span class="nav__logo-author"> · P.D.V. Prasad</span></span>
+        </div>
       </div>
       <div class="nav__links">
         <div class="nav__link" data-view="home" onclick="App.navigate('home')" id="nav-home">Home</div>
         <div class="nav__link" data-view="parables" onclick="App.navigate('parables')" id="nav-parables">Parables</div>
         <div class="nav__link" data-view="miracles" onclick="App.navigate('miracles')" id="nav-miracles">Miracles</div>
-        <div class="nav__link" id="lang-toggle" onclick="App.toggleLang()" title="Switch to Telugu">🌐 తెలుగు</div>
+      </div>
+      <div class="nav__actions">
+        <div class="nav__link nav__lang-btn" id="lang-toggle" onclick="App.toggleLang()" title="Switch to Telugu">🌐 తెలుగు</div>
         <div class="theme-btn-wrap" onclick="App.toggleTheme()" id="theme-toggle" title="Toggle dark / light mode">
           <span class="theme-icon" id="theme-icon">☀️</span>
           <div class="theme-btn" id="theme-btn"></div>

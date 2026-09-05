@@ -101,7 +101,7 @@ const App = (() => {
     const isTe = currentLang === 'te';
     const logo = document.getElementById('nav-logo');
     if (logo) {
-      logo.innerHTML = `<div class="nav__logo-icon">✦</div> ${isTe ? 'బైబిలు ధ్యానములు · పి.డి.వి. ప్రసాద్' : 'Bible Studies · P.D.V. Prasad'}`;
+      logo.innerHTML = `<div class="nav__logo-icon">✦</div><span class="nav__logo-text"><span class="nav__logo-title">${isTe ? 'బైబిలు ధ్యానములు' : 'Bible Studies'}</span><span class="nav__logo-author">${isTe ? ' · పి.డి.వి. ప్రసాద్' : ' · P.D.V. Prasad'}</span></span>`;
     }
     const homeBtn = document.getElementById('nav-home');
     if (homeBtn) homeBtn.textContent = isTe ? 'హోమ్' : 'Home';
