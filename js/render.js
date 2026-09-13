@@ -38,6 +38,7 @@ const Renderer = (() => {
       thematicLessonDesc: "Thematic lesson from the miracles",
       scripture: "Scripture",
       meditation: "Meditation & Reflection",
+      acknowledgements: "Acknowledgements",
       prayer: "Prayer",
       videoTeaching: "Video Teaching",
       opensOnYoutube: "Opens on YouTube",
@@ -80,6 +81,7 @@ const Renderer = (() => {
       thematicLessonDesc: "అద్భుతముల నుండి ఆత్మీయ పాఠము",
       scripture: "వాక్య భాగము",
       meditation: "ధ్యానము & భావము",
+      acknowledgements: "కృతజ్ఞతలు",
       prayer: "ప్రార్థన",
       videoTeaching: "వీడియో బోధన",
       opensOnYoutube: "యూట్యూబ్‌లో వీక్షించండి",
@@ -343,6 +345,16 @@ const Renderer = (() => {
       </div>
     ` : '';
 
+    const ackParas = item.acknowledgements || [];
+    const acknowledgementsHtml = ackParas.length > 0 ? `
+      <div class="content-section">
+        <div class="content-section__label">${t(lang, 'acknowledgements')}</div>
+        <div class="body-text">
+          ${ackParas.map(p => `<p>${esc(p)}</p>`).join('')}
+        </div>
+      </div>
+    ` : '';
+
     const prayerHtml = item.prayer ? `
       <div class="content-section">
         <div class="content-section__label">${t(lang, 'prayer')}</div>
@@ -418,6 +430,7 @@ const Renderer = (() => {
         <div class="chapter-content">
           ${scriptureHtml}
           ${explanationHtml}
+          ${acknowledgementsHtml}
           ${prayerHtml}
           ${videoHtml}
 
