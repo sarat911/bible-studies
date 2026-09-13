@@ -40,6 +40,13 @@ const Renderer = (() => {
       meditation: "Meditation & Reflection",
       acknowledgements: "Acknowledgements",
       prayer: "Prayer",
+      navLessons: "Miracles Thematic Lessons",
+      thematicLessonsTitle: "Miracles Thematic Lessons",
+      thematicLessonsSubtitle: "Spiritual lessons, theological meditations, and prayers drawn from the miracles of Jesus Christ.",
+      partTwoBadge: "Part Two · Thematic Lessons",
+      continueLessonsTitle: "Part 2: Miracles Thematic Lessons",
+      continueLessonsDesc: "Explore the timeless spiritual lessons, meditations, and prayers drawn from the miracles.",
+      exploreLessons: "Explore Thematic Lessons",
       videoTeaching: "Video Teaching",
       opensOnYoutube: "Opens on YouTube",
       watchOnYoutube: "Watch on YouTube",
@@ -83,6 +90,13 @@ const Renderer = (() => {
       meditation: "ధ్యానము & భావము",
       acknowledgements: "కృతజ్ఞతలు",
       prayer: "ప్రార్థన",
+      navLessons: "అద్భుతముల ఆత్మీయ పాఠములు",
+      thematicLessonsTitle: "అద్భుతముల ఆత్మీయ పాఠములు",
+      thematicLessonsSubtitle: "యేసుక్రీస్తు చేసిన అద్భుత కార్యముల నుండి గ్రహించిన ఆత్మీయ పాఠములు, ధ్యానములు మరియు ప్రార్థనలు.",
+      partTwoBadge: "రెండవ భాగము · ఆత్మీయ పాఠములు",
+      continueLessonsTitle: "రెండవ భాగము: అద్భుతముల ఆత్మీయ పాఠములు",
+      continueLessonsDesc: "అద్భుతముల నుండి రచయిత వివరించిన లోతైన ఆత్మీయ సత్యములు మరియు ప్రార్థనలను ధ్యానించండి.",
+      exploreLessons: "ఆత్మీయ పాఠములను చూడండి",
       videoTeaching: "వీడియో బోధన",
       opensOnYoutube: "యూట్యూబ్‌లో వీక్షించండి",
       watchOnYoutube: "యూట్యూబ్‌లో చూడండి",
@@ -283,7 +297,6 @@ const Renderer = (() => {
                 <span class="stat-pill__num">${items.length}</span>
                 ${isParables ? (lang === 'te' ? 'ఉపమానములు' : 'Parables') : (lang === 'te' ? 'అద్భుతములు' : 'Miracles & Healings')}
               </div>
-              ${!isParables && lessons.length ? `<div class="stat-pill"><span class="stat-pill__num">${lessons.length}</span> ${lang === 'te' ? 'ఆత్మీయ పాఠములు' : 'Thematic Lessons'}</div>` : ''}
               <div class="stat-pill">📖 ${esc(book.author)}</div>
             </div>
           </div>
@@ -293,10 +306,65 @@ const Renderer = (() => {
           <div class="chapter-grid__section-title">${isParables ? t(lang, 'allParables') : t(lang, 'allMiracles')}</div>
           <div class="chapter-grid__items">${itemCards}</div>
 
-          ${!isParables && lessonCards ? `
-            <div class="chapter-grid__section-title">${t(lang, 'thematicLessons')}</div>
-            <div class="chapter-grid__items">${lessonCards}</div>
+          ${!isParables ? `
+            <div class="continue-banner" onclick="App.navigate('lessons')" id="btn-continue-lessons">
+              <div>
+                <span class="continue-banner__badge">${t(lang, 'partTwoBadge')}</span>
+                <div class="continue-banner__title">${t(lang, 'continueLessonsTitle')}</div>
+                <div class="continue-banner__desc">${t(lang, 'continueLessonsDesc')}</div>
+              </div>
+              <div class="continue-banner__btn">${t(lang, 'exploreLessons')} →</div>
+            </div>
           ` : ''}
+        </div>
+
+        <footer class="footer">
+          <p class="footer__text">${t(lang, 'footerText')}</p>
+          <div class="footer__divider"></div>
+          <p class="footer__verse">${t(lang, 'footerVerse')}</p>
+        </footer>
+      </div>
+    `;
+  }
+
+  // ── LESSONS INDEX PAGE (Dedicated Page) ────────────────────
+
+  function renderLessonsIndex(book, lang = 'en') {
+    const lessons = book.thematic_lessons || [];
+    const lessonCards = lessons.map((item, idx) => `
+      <div class="chapter-card slide-up" id="lesson-card-${item.number}"
+        onclick="App.navigate('lesson', ${item.number})"
+        style="animation-delay:${(idx % 6) * 0.05}s">
+        <div class="chapter-card__num">${item.number}</div>
+        <div class="chapter-card__body">
+          <div class="chapter-card__title">${esc(item.title)}</div>
+          <div class="chapter-card__ref">${t(lang, 'thematicLessonDesc')}</div>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="page fade-in" id="page-lessons">
+        <div class="page-hero">
+          <div class="page-hero__inner">
+            <div class="page-hero__back" onclick="App.navigate('home')">${t(lang, 'backHome')}</div>
+            <h1 class="page-hero__title">${t(lang, 'thematicLessonsTitle')}</h1>
+            <p style="margin: 8px 0 20px 0; font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; max-width: 780px;">
+              ${t(lang, 'thematicLessonsSubtitle')}
+            </p>
+            <div class="page-hero__stats">
+              <div class="stat-pill">
+                <span class="stat-pill__num">${lessons.length}</span>
+                ${lang === 'te' ? 'ఆత్మీయ పాఠములు' : 'Thematic Lessons'}
+              </div>
+              <div class="stat-pill">📖 ${esc(book.author)}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chapter-grid">
+          <div class="chapter-grid__section-title">${t(lang, 'navLessons')}</div>
+          <div class="chapter-grid__items">${lessonCards}</div>
         </div>
 
         <footer class="footer">
@@ -386,9 +454,9 @@ const Renderer = (() => {
       </div>
     ` : '';
 
-    const bookType = isLesson ? 'miracles' : type;
+    const bookType = isLesson ? 'lessons' : type;
     const bookLabel = isParables ? (lang === 'te' ? 'ఉపమానములు' : 'Parables') : (lang === 'te' ? 'అద్భుతములు' : 'Miracles & Healings');
-    const sectionLabel = isLesson ? (lang === 'te' ? 'ఆత్మీయ పాఠములు' : 'Thematic Lessons') : bookLabel;
+    const sectionLabel = isLesson ? t(lang, 'navLessons') : bookLabel;
 
     const prevBtn = prev ? `
       <div class="chapter-nav__btn chapter-nav__btn--prev" onclick="App.navigate('${type}', ${prev.number})">
@@ -449,5 +517,5 @@ const Renderer = (() => {
     `;
   }
 
-  return { renderHome, renderBookIndex, renderChapter, t };
+  return { renderHome, renderBookIndex, renderLessonsIndex, renderChapter, t };
 })();

@@ -77,13 +77,16 @@ const App = (() => {
         html = Renderer.renderBookIndex(miracles, 'miracles', currentLang);
       }
       setActiveNav('miracles');
+    } else if (view === 'lessons') {
+      html = Renderer.renderLessonsIndex(miracles, currentLang);
+      setActiveNav('lessons');
     } else if (view === 'lesson') {
       if (number != null) {
         html = Renderer.renderChapter(miracles, 'lesson', number, currentLang);
       } else {
-        html = Renderer.renderBookIndex(miracles, 'miracles', currentLang);
+        html = Renderer.renderLessonsIndex(miracles, currentLang);
       }
-      setActiveNav('miracles');
+      setActiveNav('lessons');
     }
 
     root().innerHTML = html;
@@ -92,8 +95,9 @@ const App = (() => {
   }
 
   function setActiveNav(view) {
+    const navKey = (view === 'lesson' || view === 'lessons') ? 'lessons' : view;
     document.querySelectorAll('.nav__link').forEach(el => {
-      el.classList.toggle('active', el.dataset.view === view);
+      el.classList.toggle('active', el.dataset.view === navKey);
     });
   }
 
@@ -111,6 +115,9 @@ const App = (() => {
 
     const miraclesBtn = document.getElementById('nav-miracles');
     if (miraclesBtn) miraclesBtn.textContent = isTe ? 'అద్భుతములు' : 'Miracles';
+
+    const lessonsBtn = document.getElementById('nav-lessons');
+    if (lessonsBtn) lessonsBtn.textContent = isTe ? 'అద్భుతముల ఆత్మీయ పాఠములు' : 'Miracles Thematic Lessons';
 
     const langBtn = document.getElementById('lang-toggle');
     if (langBtn) {
